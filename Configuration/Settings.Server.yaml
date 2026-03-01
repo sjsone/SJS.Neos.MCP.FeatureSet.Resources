@@ -1,0 +1,8 @@
+SJS:
+  Neos:
+    MCP:
+      server:
+        # configuration for the default server
+        mcp:
+          featureSets:
+            media: \SJS\Neos\MCP\FeatureSet\Resources\MediaFeatureSet
