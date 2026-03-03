@@ -13,11 +13,11 @@ use Neos\Media\Domain\Model\Tag;
 use Neos\Media\Domain\Repository\AssetCollectionRepository;
 use Neos\Media\Domain\Repository\AssetRepository;
 use Neos\Media\Domain\Repository\TagRepository;
-use SJS\Neos\MCP\Domain\MCP\Tool;
-use SJS\Neos\MCP\Domain\MCP\Tool\Annotations;
-use SJS\Neos\MCP\Domain\MCP\Tool\Content;
-use SJS\Neos\MCP\JsonSchema\ObjectSchema;
-use SJS\Neos\MCP\JsonSchema\StringSchema;
+use SJS\Flow\MCP\Domain\MCP\Tool;
+use SJS\Flow\MCP\Domain\MCP\Tool\Annotations;
+use SJS\Flow\MCP\Domain\MCP\Tool\Content;
+use SJS\Flow\MCP\JsonSchema\ObjectSchema;
+use SJS\Flow\MCP\JsonSchema\StringSchema;
 
 class ListMediaTool extends Tool
 {
@@ -39,7 +39,7 @@ class ListMediaTool extends Tool
             name: 'media_list_media',
             description: 'Lists all media assets; optionally filtered by tag (label) and/or collection (title)',
             inputSchema: new ObjectSchema(properties: [
-                'tag'        => new StringSchema(description: 'Filter by tag label'),
+                'tag' => new StringSchema(description: 'Filter by tag label'),
                 'collection' => new StringSchema(description: 'Filter by asset collection title'),
             ]),
             annotations: new Annotations(
@@ -91,13 +91,13 @@ class ListMediaTool extends Tool
         }
 
         return [
-            'identifier'  => $asset->getIdentifier(),
-            'title'       => $asset->getTitle(),
-            'caption'     => $asset->getCaption(),
-            'mediaType'   => $asset->getMediaType(),
-            'filename'    => $asset->getResource()->getFilename(),
-            'fileSize'    => $asset->getResource()->getFileSize(),
-            'tags'        => $tags,
+            'identifier' => $asset->getIdentifier(),
+            'title' => $asset->getTitle(),
+            'caption' => $asset->getCaption(),
+            'mediaType' => $asset->getMediaType(),
+            'filename' => $asset->getResource()->getFilename(),
+            'fileSize' => $asset->getResource()->getFileSize(),
+            'tags' => $tags,
             'collections' => $collections,
         ];
     }
