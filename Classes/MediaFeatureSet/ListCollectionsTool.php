@@ -39,6 +39,9 @@ class ListCollectionsTool extends Tool
         );
     }
 
+    /**
+     * @param array<string,mixed> $input
+     */
     public function run(ActionRequest $actionRequest, array $input): Content
     {
         $result = [];
@@ -52,6 +55,6 @@ class ListCollectionsTool extends Tool
                 'tags' => $tags,
             ];
         }
-        return Content::structured($result)->addText(json_encode($result));
+        return Content::structuredWithFallback($result);
     }
 }

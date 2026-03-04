@@ -1,0 +1,12 @@
+parameters:
+    level: 8
+    treatPhpDocTypesAsCertain: false
+    paths:
+        - Classes
+
+    ignoreErrors:
+        -
+            message: '#^Call to an undefined method Neos\\Media\\Domain\\Repository\\AssetCollectionRepository\:\:findOneByTitle\(\)\.$#'
+            identifier: method.notFound
+            count: 1
+            path: Classes/MediaFeatureSet/ListMediaTool.php

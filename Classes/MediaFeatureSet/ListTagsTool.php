@@ -39,12 +39,18 @@ class ListTagsTool extends Tool
         );
     }
 
+    /**
+     * @param array<string,mixed> $input
+     */
     public function run(ActionRequest $actionRequest, array $input): Content
     {
         $result = [];
         foreach ($this->tagRepository->findAll() as $tag) {
             /** @var Tag $tag */
             $tagIdentifier = $this->persistenceManager->getIdentifierByObject($tag);
+            if (!\is_string($tagIdentifier)) {
+                continue;
+            }
 
             $result[$tagIdentifier] = [
                 'label' => $tag->getLabel(),
@@ -52,6 +58,6 @@ class ListTagsTool extends Tool
                 'assetCount' => $this->assetRepository->countByTag($tag),
             ];
         }
-        return Content::structured($result)->addText(json_encode($result));
+        return Content::structuredWithFallback($result);
     }
 }

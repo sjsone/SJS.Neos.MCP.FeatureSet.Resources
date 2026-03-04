@@ -7,6 +7,7 @@ namespace SJS\Neos\MCP\FeatureSet\Resources\MediaFeatureSet;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\ActionRequest;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
+use Neos\Flow\Persistence\QueryResultInterface;
 use Neos\Media\Domain\Model\Asset;
 use Neos\Media\Domain\Model\AssetCollection;
 use Neos\Media\Domain\Model\Tag;
@@ -49,10 +50,14 @@ class ListMediaTool extends Tool
         );
     }
 
+    /**
+     * @param array<string,mixed> $input
+     */
     public function run(ActionRequest $_, array $input): Content
     {
         $tag = isset($input['tag']) ? $this->tagRepository->findOneByLabel($input['tag']) : null;
-        $collection = isset($input['collection']) ? $this->assetCollectionRepository->findOneByTitle($input['collection']) : null;
+
+        $collection = $this->retrieveCollection($input);
 
         $assets = $this->resolveAssets($tag, $collection);
 
@@ -61,10 +66,21 @@ class ListMediaTool extends Tool
             $result[$asset->getIdentifier()] = $this->assetToArray($asset);
         }
 
-        return Content::structured($result)->addText(json_encode($result));
+        return Content::structuredWithFallback($result);
     }
 
-    protected function resolveAssets(?Tag $tag, ?AssetCollection $collection): iterable
+    /**
+     * @param array<string,mixed> $input
+     */
+    protected function retrieveCollection(array $input): ?AssetCollection
+    {
+        if (!isset($input['collection'])) {
+            return null;
+        }
+        return $this->assetCollectionRepository->findOneByTitle($input['collection']);
+    }
+
+    protected function resolveAssets(?Tag $tag, ?AssetCollection $collection): QueryResultInterface
     {
         if ($tag !== null && $collection !== null) {
             return $this->assetRepository->findByTag($tag, $collection);
@@ -78,6 +94,9 @@ class ListMediaTool extends Tool
         return $this->assetRepository->findAll();
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     protected function assetToArray(Asset $asset): array
     {
         $tags = [];
