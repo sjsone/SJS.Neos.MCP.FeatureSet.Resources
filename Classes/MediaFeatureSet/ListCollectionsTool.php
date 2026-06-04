@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SJS\Neos\MCP\FeatureSet\Resources\MediaFeatureSet;
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Mvc\ActionRequest;
+use SJS\Flow\MCP\Domain\Identity\ServerContext;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
 use Neos\Media\Domain\Model\AssetCollection;
 use Neos\Media\Domain\Repository\AssetCollectionRepository;
@@ -42,7 +42,7 @@ class ListCollectionsTool extends Tool
     /**
      * @param array<string,mixed> $input
      */
-    public function run(ActionRequest $actionRequest, array $input): Content
+    public function run(ServerContext $serverContext, array $input): Content
     {
         $result = [];
         foreach ($this->assetCollectionRepository->findAll() as $collection) {
