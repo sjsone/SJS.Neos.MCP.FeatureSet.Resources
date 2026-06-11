@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SJS\Neos\MCP\FeatureSet\Resources\MediaFeatureSet;
 
 use Neos\Flow\Annotations as Flow;
-use SJS\Flow\MCP\Domain\Identity\ServerContext;
+use SJS\Flow\MCP\Domain\Connection\ServerContext;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
 use Neos\Media\Domain\Model\Tag;
 use Neos\Media\Domain\Repository\AssetRepository;
@@ -13,9 +13,11 @@ use Neos\Media\Domain\Repository\TagRepository;
 use SJS\Flow\MCP\Domain\MCP\Tool;
 use SJS\Flow\MCP\Domain\MCP\Tool\Annotations;
 use SJS\Flow\MCP\Domain\MCP\Tool\Content;
+use SJS\Flow\MCP\Domain\MCP\ToolConstructor;
+use SJS\Flow\MCP\FeatureSet\FeatureSetInterface;
 use SJS\Flow\MCP\JsonSchema\ObjectSchema;
 
-class ListTagsTool extends Tool
+class ListTagsTool extends Tool implements ToolConstructor
 {
     #[Flow\Inject]
     protected TagRepository $tagRepository;
@@ -26,7 +28,7 @@ class ListTagsTool extends Tool
     #[Flow\Inject]
     protected PersistenceManagerInterface $persistenceManager;
 
-    public function __construct()
+    public function __construct(FeatureSetInterface $featureSet)
     {
         parent::__construct(
             name: 'list_tags',
@@ -35,7 +37,8 @@ class ListTagsTool extends Tool
             annotations: new Annotations(
                 title: 'List Tags',
                 readOnlyHint: true
-            )
+            ),
+            featureSet: $featureSet
         );
     }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SJS\Neos\MCP\FeatureSet\Resources\MediaFeatureSet;
 
 use Neos\Flow\Annotations as Flow;
-use SJS\Flow\MCP\Domain\Identity\ServerContext;
+use SJS\Flow\MCP\Domain\Connection\ServerContext;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
 use Neos\Flow\Persistence\QueryResultInterface;
 use Neos\Media\Domain\Model\Asset;
@@ -19,8 +19,10 @@ use SJS\Flow\MCP\Domain\MCP\Tool\Annotations;
 use SJS\Flow\MCP\Domain\MCP\Tool\Content;
 use SJS\Flow\MCP\JsonSchema\ObjectSchema;
 use SJS\Flow\MCP\JsonSchema\StringSchema;
+use SJS\Flow\MCP\Domain\MCP\ToolConstructor;
+use SJS\Flow\MCP\FeatureSet\FeatureSetInterface;
 
-class ListMediaTool extends Tool
+class ListMediaTool extends Tool implements ToolConstructor
 {
     #[Flow\Inject]
     protected AssetRepository $assetRepository;
@@ -34,7 +36,7 @@ class ListMediaTool extends Tool
     #[Flow\Inject]
     protected PersistenceManagerInterface $persistenceManager;
 
-    public function __construct()
+    public function __construct(FeatureSetInterface $featureSet)
     {
         parent::__construct(
             name: 'media_list_media',
@@ -46,7 +48,8 @@ class ListMediaTool extends Tool
             annotations: new Annotations(
                 title: 'List Media Assets',
                 readOnlyHint: true
-            )
+            ),
+            featureSet: $featureSet
         );
     }
 
